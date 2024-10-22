@@ -1,0 +1,72 @@
+name: shopping-list-infrastructure-prod
+
+networks:
+  shopping-list-prod:
+    external: true
+  caddy:
+    external: true
+
+volumes:
+  postgres-data:
+  caddy-config:
+  caddy-data:
+  seq-data:
+
+services:
+  caddy:
+    image: caddy:latest
+    container_name: shopping-list-prod.caddy
+    networks:
+      - shopping-list-prod
+      - caddy
+    volumes:
+      - caddy-config:/config
+      - caddy-data:/data
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+    environment:
+      DOMAIN: ${DOMAIN}
+    restart: always
+
+  haproxy:
+    image: shopping-list-prod.haproxy
+    container_name: shopping-list-prod.haproxy
+    pull_policy:
+      build
+    build:
+      context: .
+      dockerfile: ./haproxy/Dockerfile-haproxy
+    networks:
+      - shopping-list-prod
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    environment:
+      ALLOWED_IP: ${HA_PROXY_ALLOWED_IP}
+    restart: always
+  
+  postgres:
+    image: postgres:latest
+    container_name: shopping-list-prod.postgres
+    networks:
+      - shopping-list-prod
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: always
+  
+  seq:
+    image: datalust/seq:latest
+    container_name: shopping-list-prod.seq
+    networks:
+      - shopping-list-prod
+    volumes:
+      - seq-data:/data
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_FEATURES_ENABLED: true
+      SEQ_FIRSTRUN_ADMINUSERNAME: ${SEQ_FIRSTRUN_ADMINUSERNAME}
+      SEQ_FIRSTRUN_ADMINPASSWORD: ${SEQ_FIRSTRUN_ADMINPASSWORD}
+    restart: always

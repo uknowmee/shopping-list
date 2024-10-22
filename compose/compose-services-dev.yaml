@@ -1,0 +1,28 @@
+name: shopping-list-services-dev
+
+networks:
+  shopping-list-dev:
+    external: true
+
+services:
+  app:
+    image: shopping-list-dev.app
+    container_name: shopping-list-dev.app
+    pull_policy:
+      build
+    build:
+      context: ../
+      dockerfile: src/App/Shopping.List.App.Blazor/Dockerfile
+      args:
+        BUILD_CONFIGURATION: ${BUILD_CONFIGURATION:-Debug}
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      DatabaseSettings:Auth:ConnectionString: ${AUTH_DB:-Host=postgres;Port=5432;Database=auth;Username=postgres;Password=postgrespw;}
+      DatabaseSettings:ShoppingList:ConnectionString: ${SHOPPING_LIST_DB:-Host=postgres;Port=5432;Database=shopping-list;Username=postgres;Password=postgrespw;}
+      SEQ_API_KEY: ${SEQ_API_KEY}
+      SEQ_HOST: ${SEQ_HOST:-http://seq:80}
+    ports:
+      - "8080:8080"
+    networks:
+      - shopping-list-dev
+    restart: unless-stopped

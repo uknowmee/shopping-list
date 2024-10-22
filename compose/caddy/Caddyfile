@@ -1,0 +1,12 @@
+http://{$DOMAIN} {
+
+    handle /* {
+        reverse_proxy app:8080
+    }
+
+    # ------------------------Infrastructure------------------------
+
+    handle_path /seq/* {
+        reverse_proxy seq:80
+    }
+}

@@ -1,0 +1,92 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{28E63A06-99C2-4B67-AAEC-4217E02B9C0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "compose", "compose", "{7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}"
+	ProjectSection(SolutionItems) = preProject
+		compose\compose-infrastructure-prod.yaml = compose\compose-infrastructure-prod.yaml
+		compose\compose-infrastructure-dev.yaml = compose\compose-infrastructure-dev.yaml
+		compose\compose-services-dev.yaml = compose\compose-services-dev.yaml
+		compose\compose-services-prod.yaml = compose\compose-services-prod.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{7B2A3F5B-EF49-4B43-9380-978D4D9C2D0D}"
+	ProjectSection(SolutionItems) = preProject
+		docs\appRequirements.md = docs\appRequirements.md
+		docs\README.md = docs\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution.Items", "Solution.Items", "{32DAF64B-EFB7-4D04-901C-ADEB9BDBA1A9}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		README.md = README.md
+		Shopping.List.sln = Shopping.List.sln
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{8FC70975-05D7-4B03-80D1-2DE8681E7412}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{58536FDD-6E7B-419D-B3D3-EEEFAC65E4A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Framework.Core", "src\Framework\Shopping.List.Framework.Core\Shopping.List.Framework.Core.csproj", "{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.App.Blazor", "src\App\Shopping.List.App.Blazor\Shopping.List.App.Blazor.csproj", "{D46BEE98-D5C9-4014-9BCE-561F545DE1E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.App.Blazor.Client", "src\App\Shopping.List.App.Blazor.Client\Shopping.List.App.Blazor.Client.csproj", "{B9931D67-AA07-46B2-8783-5D9D4778F8C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.App.Shared", "src\App\Shopping.List.App.Shared\Shopping.List.App.Shared.csproj", "{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "haproxy", "haproxy", "{B65D6EEB-1E04-471B-AE1F-06C4735F4774}"
+	ProjectSection(SolutionItems) = preProject
+		compose\haproxy\haproxy.cfg = compose\haproxy\haproxy.cfg
+		compose\haproxy\Dockerfile-haproxy = compose\haproxy\Dockerfile-haproxy
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "caddy", "caddy", "{3B05A4DD-26FA-44BE-9DCD-7548E6EF662B}"
+	ProjectSection(SolutionItems) = preProject
+		compose\caddy\Caddyfile = compose\caddy\Caddyfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".env", ".env", "{D04939FE-2300-453F-BB0F-515B38AB1E11}"
+	ProjectSection(SolutionItems) = preProject
+		.env\prod.infrastructure.env = .env\prod.infrastructure.env
+		.env\prod.services.env = .env\prod.services.env
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8FC70975-05D7-4B03-80D1-2DE8681E7412} = {28E63A06-99C2-4B67-AAEC-4217E02B9C0C}
+		{C41C3A3D-3FFE-4AE5-827C-001AA269C0C6} = {28E63A06-99C2-4B67-AAEC-4217E02B9C0C}
+		{58536FDD-6E7B-419D-B3D3-EEEFAC65E4A8} = {28E63A06-99C2-4B67-AAEC-4217E02B9C0C}
+		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D} = {58536FDD-6E7B-419D-B3D3-EEEFAC65E4A8}
+		{D46BEE98-D5C9-4014-9BCE-561F545DE1E0} = {8FC70975-05D7-4B03-80D1-2DE8681E7412}
+		{B9931D67-AA07-46B2-8783-5D9D4778F8C0} = {8FC70975-05D7-4B03-80D1-2DE8681E7412}
+		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734} = {8FC70975-05D7-4B03-80D1-2DE8681E7412}
+		{B65D6EEB-1E04-471B-AE1F-06C4735F4774} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
+		{3B05A4DD-26FA-44BE-9DCD-7548E6EF662B} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D46BEE98-D5C9-4014-9BCE-561F545DE1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D46BEE98-D5C9-4014-9BCE-561F545DE1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D46BEE98-D5C9-4014-9BCE-561F545DE1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D46BEE98-D5C9-4014-9BCE-561F545DE1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9931D67-AA07-46B2-8783-5D9D4778F8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9931D67-AA07-46B2-8783-5D9D4778F8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9931D67-AA07-46B2-8783-5D9D4778F8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9931D67-AA07-46B2-8783-5D9D4778F8C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

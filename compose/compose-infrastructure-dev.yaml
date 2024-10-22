@@ -1,0 +1,37 @@
+name: shopping-list-infrastructure-dev
+
+networks:
+  shopping-list-dev:
+    external: true
+
+volumes:
+  postgres-data:
+  seq-data:
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: shopping-list-dev.postgres
+    networks:
+      - shopping-list-dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgrespw}
+    restart: unless-stopped
+
+  seq:
+    image: datalust/seq:latest
+    container_name: shopping-list-dev.seq
+    networks:
+      - shopping-list-dev
+    ports:
+      - "5341:80"
+    volumes:
+      - seq-data:/data
+    environment:
+      ACCEPT_EULA: Y
+    restart: unless-stopped

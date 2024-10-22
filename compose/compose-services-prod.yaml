@@ -1,0 +1,28 @@
+name: shopping-list-services-prod
+
+networks:
+  shopping-list-prod:
+    external: true
+  caddy:
+    external: true
+
+services:
+  app:
+    image: shopping-list-prod.app
+    container_name: shopping-list-prod.app
+    pull_policy:
+      build
+    build:
+      context: ../
+      dockerfile: src/App/Shopping.List.App.Blazor/Dockerfile
+      args:
+        BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      DatabaseSettings:Auth:ConnectionString: ${AUTH_DB}
+      DatabaseSettings:ShoppingList:ConnectionString: ${SHOPPING_LIST_DB}
+      SEQ_API_KEY: ${SEQ_API_KEY}
+      SEQ_HOST: ${SEQ_HOST}
+    networks:
+      - shopping-list-prod
+    restart: always
