@@ -14,7 +14,8 @@ internal static class Extensions
 
     public static IApplicationBuilder UseSwagger(this IApplicationBuilder app)
     {
-        if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+        var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+        if (env.IsDevelopment() || env.IsStaging())
         {
             SwaggerBuilderExtensions
                 .UseSwagger(app)

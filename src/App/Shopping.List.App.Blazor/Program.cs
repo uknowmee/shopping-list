@@ -10,13 +10,13 @@ builder.AddFramework(c => c.ApplyConfiguration())
     .AddDatabase<AuthCtx>("DatabaseSettings:Auth")
     .AddDatabase<ShoppingListCtx>("DatabaseSettings:ShoppingList")
     .AddBlazor()
-    .AddCore();
+    .AddCoreServices();
 
 var app = builder.Build();
 
 app.UseFramework()
     .UseBlazor()
-    .UseCore()
+    .UseCoreServices()
     .CreateDatabase<AuthCtx>()
     .CreateDatabase<ShoppingListCtx>();
 

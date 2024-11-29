@@ -1,8 +1,7 @@
-name: shopping-list-infrastructure-dev
+name: shopping-list-dev
 
 networks:
   shopping-list-dev:
-    external: true
 
 volumes:
   postgres-data:

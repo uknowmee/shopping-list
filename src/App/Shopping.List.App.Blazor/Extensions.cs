@@ -2,17 +2,19 @@
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Json;
+using Shopping.List.App.Blazor.Services;
 
 namespace Shopping.List.App.Blazor;
 
 public static partial class Extensions
 {
-    public static WebApplicationBuilder AddCore(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddCoreServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<IShoppingUserService, ShoppingUserService>();
         return builder;
     }
 
-    public static WebApplication UseCore(this WebApplication app)
+    public static WebApplication UseCoreServices(this WebApplication app)
     {
         return app;
     }
@@ -52,6 +54,7 @@ public static partial class Extensions
                 serverUrl: seqUrl,
                 apiKey: seqApiKey,
                 controlLevelSwitch: controlLevelSwitch
-            );
+            )
+            .Enrich.WithProperty("Application", "Shopping.List.App.Blazor");
     }
 }

@@ -1,10 +1,7 @@
-name: shopping-list-services-prod
+name: shopping-list-prod
 
 networks:
   shopping-list-prod:
-    external: true
-  caddy:
-    external: true
 
 services:
   app:
@@ -21,6 +18,7 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       DatabaseSettings:Auth:ConnectionString: ${AUTH_DB}
       DatabaseSettings:ShoppingList:ConnectionString: ${SHOPPING_LIST_DB}
+      SendGridKey: ${SEND_GRID_KEY}
       SEQ_API_KEY: ${SEQ_API_KEY}
       SEQ_HOST: ${SEQ_HOST}
     networks:

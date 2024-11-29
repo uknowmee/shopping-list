@@ -33,8 +33,16 @@ public static partial class Extensions
             .AddSignInManager()
             .AddDefaultTokenProviders();
 
-        builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+        }
+        else
+        {
+            builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(3));
+            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityEmailSender>();
+        }
 
         return builder;
     }
@@ -65,7 +73,7 @@ public static partial class Extensions
 
         app.UseAuthentication();
         app.UseAuthorization();
-        
+
         app.UseAntiforgery();
 
         return app;

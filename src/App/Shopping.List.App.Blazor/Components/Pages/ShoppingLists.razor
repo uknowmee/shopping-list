@@ -1,14 +1,19 @@
-﻿@page "/auth"
-
+﻿@page "/ShoppingLists"
 @using Microsoft.AspNetCore.Authorization
 
 @attribute [Authorize]
 @rendermode InteractiveAuto
 
-<PageTitle>Auth</PageTitle>
+<PageTitle>ShoppingLists</PageTitle>
+
+<h3>ShoppingLists</h3>
 
 <h1>You are authenticated</h1>
 
 <AuthorizeView>
     Hello @context.User.Identity?.Name!
 </AuthorizeView>
+
+@code {
+
+}

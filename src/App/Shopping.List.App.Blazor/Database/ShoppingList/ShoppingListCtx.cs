@@ -8,5 +8,5 @@ public class ShoppingListCtx : DbContext
     {
     }
 
-    public DbSet<ShoppingList> ShoppingLists { get; set; }
+    public DbSet<ShoppingUser> Users { get; set; }
 }
