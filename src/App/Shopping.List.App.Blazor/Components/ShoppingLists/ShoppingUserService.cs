@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shopping.List.App.Blazor.Database.ShoppingList;
 
-namespace Shopping.List.App.Blazor.Services;
+namespace Shopping.List.App.Blazor.Components.ShoppingLists;
 
 public interface IShoppingUserService
 {

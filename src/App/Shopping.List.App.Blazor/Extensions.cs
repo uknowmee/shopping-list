@@ -2,7 +2,7 @@
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Json;
-using Shopping.List.App.Blazor.Services;
+using Shopping.List.App.Blazor.Components.ShoppingLists;
 
 namespace Shopping.List.App.Blazor;
 

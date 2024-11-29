@@ -11,7 +11,7 @@ public class AuthMessageSenderOptions
     public string SendGridKey { get; set; } = string.Empty;
 }
 
-public class IdentityEmailSender : IEmailSender<ApplicationUser>
+internal sealed class IdentityEmailSender : IEmailSender<ApplicationUser>
 {
     private readonly ILogger<IdentityEmailSender> _logger;
     private readonly AuthMessageSenderOptions _options;
