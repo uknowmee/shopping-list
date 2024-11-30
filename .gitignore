@@ -338,3 +338,7 @@ module.*.local.json
 pacts/
 
 .tye/
+
+# Verify
+*.received.*
+*.received/

@@ -1,0 +1,7 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: List not found,
+  StackTrace:
+at Shopping.List.App.Blazor.Database.ShoppingList.ShoppingUser.DeleteList(Guid listId)
+at Shopping.List.Tests.Unit.Model.ShoppingUserTests.<>c__DisplayClass7_0.<DeleteListForShoppingUser_ShouldThrowInvalidOperationException_WhenListNotFound>b__0()
+}

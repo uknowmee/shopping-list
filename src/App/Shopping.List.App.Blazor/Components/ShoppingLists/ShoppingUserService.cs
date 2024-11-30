@@ -20,7 +20,7 @@ public class ShoppingUserService : IShoppingUserService
 
     public async Task AddShoppingUser(Guid id)
     {
-        await _ctx.Users.AddAsync(new ShoppingUser { Id = id });
+        await _ctx.Users.AddAsync(ShoppingUser.Create(id));
         await _ctx.SaveChangesAsync();
     }
 

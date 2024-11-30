@@ -1,0 +1,22 @@
+﻿{
+  Id: Guid_1,
+  IsActive: true,
+  Lists: [
+    {
+      Id: Guid_2,
+      UserId: Guid_1,
+      Name: New Shopping List,
+      IsRealized: false,
+      Items: [
+        {
+          Id: Guid_3,
+          UserId: Guid_1,
+          ItemListId: Guid_2,
+          Quantity: 1,
+          Category: Unknown,
+          Size: Unknown
+        }
+      ]
+    }
+  ]
+}

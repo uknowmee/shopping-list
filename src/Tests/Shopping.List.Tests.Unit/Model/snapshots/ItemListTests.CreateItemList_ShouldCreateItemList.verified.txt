@@ -1,0 +1,16 @@
+﻿{
+  Id: Guid_1,
+  UserId: Guid_2,
+  Name: New Shopping List,
+  IsRealized: false,
+  Items: [
+    {
+      Id: Guid_3,
+      UserId: Guid_2,
+      ItemListId: Guid_1,
+      Quantity: 1,
+      Category: Unknown,
+      Size: Unknown
+    }
+  ]
+}

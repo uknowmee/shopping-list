@@ -55,6 +55,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".env", ".env", "{D04939FE-2
 		.env\prod.services.env = .env\prod.services.env
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Tests.Unit", "src\Tests\Shopping.List.Tests.Unit\Shopping.List.Tests.Unit.csproj", "{E1A74F89-CFE2-4FA3-8681-995754F3824E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,7 @@ Global
 		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734} = {8FC70975-05D7-4B03-80D1-2DE8681E7412}
 		{B65D6EEB-1E04-471B-AE1F-06C4735F4774} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
 		{3B05A4DD-26FA-44BE-9DCD-7548E6EF662B} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
+		{E1A74F89-CFE2-4FA3-8681-995754F3824E} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -88,5 +91,9 @@ Global
 		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1A74F89-CFE2-4FA3-8681-995754F3824E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1A74F89-CFE2-4FA3-8681-995754F3824E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1A74F89-CFE2-4FA3-8681-995754F3824E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1A74F89-CFE2-4FA3-8681-995754F3824E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

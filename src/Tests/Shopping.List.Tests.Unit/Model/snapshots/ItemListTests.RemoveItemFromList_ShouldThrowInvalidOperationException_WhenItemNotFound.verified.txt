@@ -1,0 +1,7 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: Item not found,
+  StackTrace:
+at Shopping.List.App.Blazor.Database.ShoppingList.ItemList.RemoveItem(Guid itemId)
+at Shopping.List.Tests.Unit.Model.ItemListTests.<>c__DisplayClass10_0.<RemoveItemFromList_ShouldThrowInvalidOperationException_WhenItemNotFound>b__0()
+}
