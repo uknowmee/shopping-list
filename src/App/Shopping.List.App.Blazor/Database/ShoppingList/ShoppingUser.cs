@@ -2,9 +2,9 @@
 
 public class ShoppingUser
 {
-    public Guid Id { get; set; } = Guid.Empty;
+    public Guid Id { get; } = Guid.Empty;
     public bool IsActive { get; set; } = true;
-    public List<ItemList> Lists { get; set; } = [];
+    public List<ItemList> Lists { get; init; } = [];
 
 
     [Obsolete("Only for EF", true)]
@@ -24,6 +24,13 @@ public class ShoppingUser
     {
         var list = ItemList.Create(Id);
         Lists.Add(list);
+        return list;
+    }
+    
+    public ItemList NewListAtFront()
+    {
+        var list = ItemList.Create(Id);
+        Lists.Insert(0, list);
         return list;
     }
     

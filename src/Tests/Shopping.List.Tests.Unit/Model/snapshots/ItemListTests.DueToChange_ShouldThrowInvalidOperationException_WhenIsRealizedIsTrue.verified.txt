@@ -1,0 +1,8 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: List is already realized,
+  StackTrace:
+at Shopping.List.App.Blazor.Database.ShoppingList.ItemList.SetDueTo(DateTimeOffset value)
+at Shopping.List.App.Blazor.Database.ShoppingList.ItemList.set_DueTo(Nullable`1 value)
+at Shopping.List.Tests.Unit.Model.ItemListTests.<>c__DisplayClass16_0.<DueToChange_ShouldThrowInvalidOperationException_WhenIsRealizedIsTrue>b__0()
+}

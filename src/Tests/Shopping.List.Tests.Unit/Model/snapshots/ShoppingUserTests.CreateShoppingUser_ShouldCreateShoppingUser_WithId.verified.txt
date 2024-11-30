@@ -6,6 +6,7 @@
       Id: Guid_2,
       UserId: Guid_1,
       Name: New Shopping List,
+      CreationDate: DateTimeOffset_1,
       IsRealized: false,
       Items: [
         {

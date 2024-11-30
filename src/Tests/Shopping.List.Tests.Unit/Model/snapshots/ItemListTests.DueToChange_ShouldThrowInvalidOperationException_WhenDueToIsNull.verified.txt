@@ -1,0 +1,7 @@
+﻿{
+  Type: InvalidOperationException,
+  Message: DueTo cannot be null,
+  StackTrace:
+at Shopping.List.App.Blazor.Database.ShoppingList.ItemList.set_DueTo(Nullable`1 value)
+at Shopping.List.Tests.Unit.Model.ItemListTests.<>c__DisplayClass15_0.<DueToChange_ShouldThrowInvalidOperationException_WhenDueToIsNull>b__0()
+}

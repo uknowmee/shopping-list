@@ -1,0 +1,27 @@
+﻿@page "/ShoppingLists/AddItems"
+@using Microsoft.AspNetCore.Authorization
+@using Shopping.List.App.Blazor.Database.ShoppingList
+
+@attribute [Authorize]
+@rendermode InteractiveServer
+
+@inject ILogger<AddItems> Logger
+@inject ShoppingListCtx Ctx
+
+<PageTitle>AddItems</PageTitle>
+
+<h3>Add Items</h3>
+
+<button class="btn btn-primary" @onclick="AddNewItem">New</button>
+
+@Id
+
+@code {
+    [SupplyParameterFromQuery] private Guid? Id { get; set; }
+
+    private Task AddNewItem()
+    {
+        return Task.CompletedTask;
+    }
+
+}

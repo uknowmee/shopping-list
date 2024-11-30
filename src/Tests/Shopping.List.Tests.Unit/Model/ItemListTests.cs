@@ -100,4 +100,55 @@ public class ItemListTests
 
         Assert.Equal(name, itemList.Name);
     }
+    
+    [Fact]
+    public void IsRealizedChange_ShouldChangeIsRealized_WithTrue()
+    {
+        var itemList = ItemList.Create(_userId);
+        itemList.IsRealized = true;
+
+        Assert.True(itemList.IsRealized);
+    }
+    
+    [Fact]
+    public void DueToChange_ShouldChangeDueTo_WithDateTimeOffset()
+    {
+        var itemList = ItemList.Create(_userId);
+        var dueTo = DateTimeOffset.UtcNow.AddDays(1);
+        itemList.DueTo = dueTo;
+
+        Assert.Equal(dueTo, itemList.DueTo);
+    }
+    
+    [Fact]
+    public Task DueToChange_ShouldThrowInvalidOperationException_WhenDueToIsPast()
+    {
+        var itemList = ItemList.Create(_userId);
+        var dueTo = DateTimeOffset.UtcNow.AddDays(-1);
+
+        var action = new Action(() => itemList.DueTo = dueTo);
+
+        return Throws(action, _settings);
+    }
+    
+    [Fact]
+    public Task DueToChange_ShouldThrowInvalidOperationException_WhenDueToIsNull()
+    {
+        var itemList = ItemList.Create(_userId);
+
+        var action = new Action(() => itemList.DueTo = null);
+
+        return Throws(action, _settings);
+    }
+    
+    [Fact]
+    public Task DueToChange_ShouldThrowInvalidOperationException_WhenIsRealizedIsTrue()
+    {
+        var itemList = ItemList.Create(_userId);
+        itemList.IsRealized = true;
+
+        var action = new Action(() => itemList.DueTo = DateTimeOffset.UtcNow.AddDays(1));
+
+        return Throws(action, _settings);
+    }
 }

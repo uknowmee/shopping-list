@@ -1,19 +1,217 @@
 ﻿@page "/ShoppingLists/Home"
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using Shopping.List.App.Blazor.Components.Account
+@using Shopping.List.App.Blazor.Database.Auth
+@using Shopping.List.App.Blazor.Database.ShoppingList
 
 @attribute [Authorize]
 @rendermode InteractiveServer
 
+@inject IdentityRedirectManager RedirectManager
+@inject AuthenticationStateProvider AuthStateProvider
+@inject UserManager<ApplicationUser> UserManager
+@inject ILogger<Home> Logger
+@inject ShoppingListCtx Ctx
+
 <PageTitle>ShoppingLists</PageTitle>
 
-<h3>ShoppingLists</h3>
+<h3>Your Shopping Lists</h3>
 
-<h1>You are authenticated</h1>
+<button class="btn btn-primary" @onclick="CreateNewList">New</button>
 
-<AuthorizeView>
-    Hello @context.User.Identity?.Name!
-</AuthorizeView>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Due To</th>
+        <th>Realized</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var list in SortedLists)
+    {
+        <tr class="@(list.IsRealized ? "table-secondary" : "")">
+            <td>
+                @if (list == _editingList)
+                {
+                    <input type="text" @bind="_editingList.Name" class="form-control"/>
+                }
+                else
+                {
+                    @list.Name
+                }
+            </td>
+            <td>@Format(list.CreationDate)</td>
+            <td>
+                @if (list == _editingList)
+                {
+                    <input type="datetime-local" @bind="LocalDueTo" class="form-control" disabled="@(list.IsRealized)"/>
+                }
+                else
+                {
+                    @Format(list.DueTo)
+                }
+            </td>
+            <td>
+                @switch (list.IsRealized)
+                {
+                    case true:
+                        <span class="badge bg-success">Yes</span>
+                        break;
+                    case false when _editingList?.Id == list.Id:
+                        <button class="btn btn-warning" @onclick="() => UpdateRealized(list)" disabled="@list.IsRealized">Finalize</button>
+                        break;
+                    default:
+                        <span class="badge bg-danger text-light" style="padding: 0.5rem;">Not yet</span>
+                        break;
+                }
+            </td>
+            <td>
+                @if (list == _editingList)
+                {
+                    <button class="btn btn-success" @onclick="SaveList" disabled="@(list.IsRealized)">Close</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" @onclick="() => EditList(list)" disabled="@(list.IsRealized)">Edit</button>
+                    <button class="btn btn-secondary" @onclick="() => AddItems(list)" disabled="@(list.IsRealized)">Add Items</button>
+                    <button class="btn btn-danger" @onclick="() => DeleteList(list.Id)">Delete</button>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
 
 @code {
+    private ShoppingUser? _shoppingUser;
+
+    private List<ItemList> SortedLists => _shoppingUser?.Lists ?? [];
+
+    private ItemList? _editingList;
+
+    private DateTime? LocalDueTo
+    {
+        get => _editingList?.DueTo?.ToLocalTime().DateTime;
+        set
+        {
+            try
+            {
+                if (value.HasValue && _editingList != null)
+                {
+                    _editingList.DueTo = DateTime.SpecifyKind(value.Value, DateTimeKind.Local).ToUniversalTime();
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Error setting DueTo");
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = await UserManager.GetUserAsync(authState.User) ?? throw new InvalidOperationException("User not found");
+
+        _shoppingUser = await Ctx.Users
+            .Include(u => u.Lists)
+            .SingleAsync(u => u.Id == user.Id);
+
+        SortList();
+
+        Logger.LogInformation("User {UserId} has {ListCount} lists", _shoppingUser.Id, _shoppingUser.Lists.Count);
+    }
+
+    private async Task CreateNewList()
+    {
+        if (_shoppingUser is null) return;
+        if (_editingList is not null) await SaveList();
+        var list = _shoppingUser.NewListAtFront();
+        await Ctx.Lists.AddAsync(list);
+        await Ctx.SaveChangesAsync();
+
+        Logger.LogInformation("User {UserId} created list {ListId}", _shoppingUser.Id, list.Id);
+    }
+
+    private async Task EditList(ItemList list)
+    {
+        if (_editingList is not null) await SaveList();
+        _editingList = list;
+        await Ctx.SaveChangesAsync();
+
+        Logger.LogInformation("User {UserId} started editing list {ListId}", _shoppingUser?.Id, list.Id);
+    }
+
+    private async Task DeleteList(Guid listId)
+    {
+        if (_shoppingUser is null) return;
+        if (_editingList is not null) await SaveList();
+        _shoppingUser.DeleteList(listId);
+        await Ctx.SaveChangesAsync();
+
+        Logger.LogInformation("User {UserId} deleted list {ListId}", _shoppingUser.Id, listId);
+    }
+
+    private async Task SaveList()
+    {
+        if (_editingList is null) return;
+        await Ctx.SaveChangesAsync();
+        _editingList = null;
+
+        Logger.LogInformation("User {UserId} saved list {ListId}", _shoppingUser?.Id, _editingList?.Id);
+    }
+
+    private async Task UpdateRealized(ItemList list)
+    {
+        if (_editingList is null) return;
+        list.IsRealized = true;
+        await Ctx.SaveChangesAsync();
+        _editingList = null;
+
+        Logger.LogInformation("User {UserId} finalized list {ListId}", _shoppingUser?.Id, list.Id);
+    }
+
+    private static string Format(DateTimeOffset? date) => date?.ToLocalTime().ToString("dd-MMM-yyyy HH:mm") ?? "Not Set";
+
+    private void SortList()
+    {
+        _shoppingUser?.Lists.Sort((l1, l2) =>
+            {
+                var realizedComparison = l1.IsRealized.CompareTo(l2.IsRealized);
+                if (realizedComparison != 0) return realizedComparison;
+
+                if (l1.DueTo.HasValue && l2.DueTo.HasValue)
+                {
+                    var dueToComparison = Nullable.Compare(l1.DueTo, l2.DueTo);
+                    if (dueToComparison != 0) return dueToComparison;
+                }
+                else if (l1.DueTo.HasValue)
+                {
+                    return -1;
+                }
+                else if (l2.DueTo.HasValue)
+                {
+                    return 1;
+                }
+
+                return string.Compare(l1.Name, l2.Name, StringComparison.Ordinal);
+            }
+        );
+    }
+
+    private Task AddItems(ItemList list)
+    {
+        RedirectManager.RedirectTo(
+            "ShoppingLists/AddItems",
+            new Dictionary<string, object?> { ["id"] = list.Id }
+        );
+        
+        return Task.CompletedTask;
+    }
 
 }

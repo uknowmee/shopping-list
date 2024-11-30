@@ -1,0 +1,22 @@
+.table {
+    table-layout: fixed; /* Ensures fixed column widths */
+    width: 100%; /* Ensures table spans the full container */
+}
+
+.table th, .table td {
+    width: 140px; /* Set a fixed width for each column */
+    max-width: 140px; /* Optional, for extra assurance */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    width: 200px; /* Adjust specific column width if needed */
+}
+
+table input {
+    width: 100%;
+    box-sizing: border-box;
+}

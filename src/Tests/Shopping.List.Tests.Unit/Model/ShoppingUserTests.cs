@@ -70,4 +70,15 @@ public class ShoppingUserTests
         
         return Throws(action, _settings);
     }
+    
+    [Fact]
+    public void CreateNewListAtFrontForShoppingUser_ShouldAddListAtFrontOfLists()
+    {
+        var shoppingUser = ShoppingUser.Create(Guid.NewGuid());
+        var list = shoppingUser.NewList();
+        var list2 = shoppingUser.NewList();
+        var list3 = shoppingUser.NewListAtFront();
+
+        Assert.Equal(list3, shoppingUser.Lists.First());
+    }
 }
