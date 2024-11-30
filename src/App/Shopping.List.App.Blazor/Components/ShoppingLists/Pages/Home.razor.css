@@ -20,3 +20,22 @@ table input {
     width: 100%;
     box-sizing: border-box;
 }
+
+td span {
+    padding: 0.5rem;
+    max-width: 80px;
+    min-width: 75px;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;    /* Centers vertically */
+    text-align: center;
+}
+
+button, span {
+    max-width: 95px;
+    min-width: 95px;
+    max-height: 38px;
+    min-height: 38px;
+    color: white;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;    /* Centers vertically */
+}

@@ -1,17 +1,17 @@
 ﻿@page "/ShoppingLists/Home"
-@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @using Shopping.List.App.Blazor.Components.Account
 @using Shopping.List.App.Blazor.Database.Auth
 @using Shopping.List.App.Blazor.Database.ShoppingList
+@using Blazored.Toast
+@using Blazored.Toast.Configuration
 
-@attribute [Authorize]
 @rendermode InteractiveServer
 
 @inject IdentityRedirectManager RedirectManager
-@inject AuthenticationStateProvider AuthStateProvider
 @inject UserManager<ApplicationUser> UserManager
+@inject Blazored.Toast.Services.IToastService ToastService
 @inject ILogger<Home> Logger
 @inject ShoppingListCtx Ctx
 
@@ -49,7 +49,7 @@
             <td>
                 @if (list == _editingList)
                 {
-                    <input type="datetime-local" @bind="LocalDueTo" class="form-control" disabled="@(list.IsRealized)"/>
+                    <DateTimePicker @bind-Value="LocalDueTo" ViewMode="DatePickerViewMode.DateTime" DateTimeFormat="dd-MMM-yyyy HH:mm" disabled="@(list.IsRealized)"/>
                 }
                 else
                 {
@@ -57,28 +57,26 @@
                 }
             </td>
             <td>
-                @switch (list.IsRealized)
+                @if (list.IsRealized)
                 {
-                    case true:
-                        <span class="badge bg-success">Yes</span>
-                        break;
-                    case false when _editingList?.Id == list.Id:
-                        <button class="btn btn-warning" @onclick="() => UpdateRealized(list)" disabled="@list.IsRealized">Finalize</button>
-                        break;
-                    default:
-                        <span class="badge bg-danger text-light" style="padding: 0.5rem;">Not yet</span>
-                        break;
+                    <span class="badge bg-success">Yes</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Not yet</span>
                 }
             </td>
             <td>
                 @if (list == _editingList)
                 {
                     <button class="btn btn-success" @onclick="SaveList" disabled="@(list.IsRealized)">Close</button>
+                    <button class="btn btn-warning" @onclick="() => UpdateRealized(list)" disabled="@list.IsRealized">Realized</button>
+                    <button class="btn btn-danger" @onclick="() => DeleteList(list.Id)">Delete</button>
                 }
                 else
                 {
                     <button class="btn btn-primary" @onclick="() => EditList(list)" disabled="@(list.IsRealized)">Edit</button>
-                    <button class="btn btn-secondary" @onclick="() => AddItems(list)" disabled="@(list.IsRealized)">Add Items</button>
+                    <button class="btn btn-primary" @onclick="() => AddItems(list)" disabled="@(list.IsRealized)">Add Items</button>
                     <button class="btn btn-danger" @onclick="() => DeleteList(list.Id)">Delete</button>
                 }
             </td>
@@ -87,11 +85,17 @@
     </tbody>
 </table>
 
+<BlazoredToasts Position="ToastPosition.TopRight"
+                Timeout="3"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"/>
+
 @code {
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
     private ShoppingUser? _shoppingUser;
-
     private List<ItemList> SortedLists => _shoppingUser?.Lists ?? [];
-
     private ItemList? _editingList;
 
     private DateTime? LocalDueTo
@@ -109,13 +113,14 @@
             catch (Exception e)
             {
                 Logger.LogError(e, "Error setting DueTo");
+                ToastService.ShowError("Due date cannot be in the past.");
             }
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var authState = await AuthenticationStateTask;
         var user = await UserManager.GetUserAsync(authState.User) ?? throw new InvalidOperationException("User not found");
 
         _shoppingUser = await Ctx.Users
@@ -125,6 +130,16 @@
         SortList();
 
         Logger.LogInformation("User {UserId} has {ListCount} lists", _shoppingUser.Id, _shoppingUser.Lists.Count);
+    }
+
+    private Task AddItems(ItemList list)
+    {
+        RedirectManager.RedirectTo(
+            "ShoppingLists/AddItems",
+            new Dictionary<string, object?> { ["id"] = list.Id }
+        );
+
+        return Task.CompletedTask;
     }
 
     private async Task CreateNewList()
@@ -161,9 +176,10 @@
     {
         if (_editingList is null) return;
         await Ctx.SaveChangesAsync();
-        _editingList = null;
 
         Logger.LogInformation("User {UserId} saved list {ListId}", _shoppingUser?.Id, _editingList?.Id);
+
+        _editingList = null;
     }
 
     private async Task UpdateRealized(ItemList list)
@@ -171,9 +187,10 @@
         if (_editingList is null) return;
         list.IsRealized = true;
         await Ctx.SaveChangesAsync();
-        _editingList = null;
 
         Logger.LogInformation("User {UserId} finalized list {ListId}", _shoppingUser?.Id, list.Id);
+
+        _editingList = null;
     }
 
     private static string Format(DateTimeOffset? date) => date?.ToLocalTime().ToString("dd-MMM-yyyy HH:mm") ?? "Not Set";
@@ -202,16 +219,6 @@
                 return string.Compare(l1.Name, l2.Name, StringComparison.Ordinal);
             }
         );
-    }
-
-    private Task AddItems(ItemList list)
-    {
-        RedirectManager.RedirectTo(
-            "ShoppingLists/AddItems",
-            new Dictionary<string, object?> { ["id"] = list.Id }
-        );
-        
-        return Task.CompletedTask;
     }
 
 }

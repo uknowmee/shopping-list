@@ -1,10 +1,14 @@
 ﻿@page "/ShoppingLists/AddItems"
-@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using Shopping.List.App.Blazor.Components.Account
+@using Shopping.List.App.Blazor.Database.Auth
 @using Shopping.List.App.Blazor.Database.ShoppingList
 
-@attribute [Authorize]
 @rendermode InteractiveServer
 
+@inject IdentityRedirectManager RedirectManager
+@inject UserManager<ApplicationUser> UserManager
 @inject ILogger<AddItems> Logger
 @inject ShoppingListCtx Ctx
 
@@ -12,16 +16,74 @@
 
 <h3>Add Items</h3>
 
-<button class="btn btn-primary" @onclick="AddNewItem">New</button>
+<div class="controlNav">
+    <div>
+        <button class="btn btn-primary" @onclick="BackToLists">Back</button>
+    </div>
+    <div>
+        <button class="btn btn-primary" @onclick="AddNewItem">New</button>
+    </div>
+</div>
 
-@Id
+@ListId
+
+<Select TValue="string" Color="Color.Primary" Items="Items" IsEditable="true" OnInputChangedCallback="OnInputChangedCallback"></Select>
+
+@_selected
 
 @code {
-    [SupplyParameterFromQuery] private Guid? Id { get; set; }
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
 
+    [SupplyParameterFromQuery(Name = "Id")]
+    private Guid? ListId { get; set; }
+
+    private ItemList? _list;
+    private const string HomeUri = "/ShoppingLists/Home";
+
+    private readonly List<string> _items = [];
+    private IEnumerable<SelectedItem> Items => _items.Select(i => new SelectedItem { Text = i, Value = i });
+    private string _selected = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ListId is null)
+        {
+            Logger.LogWarning("List Id not provided");
+            RedirectManager.RedirectTo(HomeUri);
+            return;
+        }
+
+        var authState = await AuthenticationStateTask;
+        var user = await UserManager.GetUserAsync(authState.User) ?? throw new InvalidOperationException("User not found");
+
+        _list = await Ctx.Lists
+            .Include(l => l.Items)
+            .SingleOrDefaultAsync(l => l.Id == ListId && l.UserId == user.Id);
+
+        if (_list is null)
+        {
+            Logger.LogWarning("List not found");
+            RedirectManager.RedirectTo(HomeUri);
+            return;
+        }
+    }
+
+    private Task BackToLists()
+    {
+        RedirectManager.RedirectTo(HomeUri);
+        return Task.CompletedTask;
+    }
+    
     private Task AddNewItem()
     {
         return Task.CompletedTask;
     }
 
+    private Task OnInputChangedCallback(string arg)
+    {
+        _selected = arg;
+        _items.Add(arg);
+        return Task.CompletedTask;
+    }
+    
 }

@@ -1,0 +1,15 @@
+.control div form,
+.control div p {
+    display: flex;
+}
+
+.control div form button,
+.control div p a {
+    min-width: 200px; /* Ensure both buttons have the same width */
+    max-width: 200px; /* Set the same max-width for both buttons */
+}
+
+.control div,
+.control div {
+    padding: 5px;
+}

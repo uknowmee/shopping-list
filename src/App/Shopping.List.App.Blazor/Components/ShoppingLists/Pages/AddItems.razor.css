@@ -1,0 +1,9 @@
+.controlNav {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+.controlNav div {
+    margin-right: 10px;
+}

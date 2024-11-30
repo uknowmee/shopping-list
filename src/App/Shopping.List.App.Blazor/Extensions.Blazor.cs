@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Blazored.Toast;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Shopping.List.App.Blazor.Components.Account;
 using Shopping.List.App.Blazor.Database.Auth;
@@ -44,6 +45,10 @@ public static partial class Extensions
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityEmailSender>();
         }
 
+        builder.Services.AddServerSideBlazor();
+        builder.Services.AddBootstrapBlazor();
+        builder.Services.AddBlazoredToast();
+        
         return builder;
     }
 
