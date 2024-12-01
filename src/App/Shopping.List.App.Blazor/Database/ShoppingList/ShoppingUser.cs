@@ -5,6 +5,7 @@ public class ShoppingUser
     public Guid Id { get; } = Guid.Empty;
     public bool IsActive { get; set; } = true;
     public List<ItemList> Lists { get; init; } = [];
+    public List<ItemPicture> Pictures { get; set; } = [];
 
 
     [Obsolete("Only for EF", true)]

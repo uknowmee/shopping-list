@@ -13,9 +13,11 @@
           Id: Guid_3,
           UserId: Guid_1,
           ItemListId: Guid_2,
+          CreationDate: DateTimeOffset_2,
           Quantity: 1,
           Category: Unknown,
-          Size: Unknown
+          Size: Unknown,
+          IsBought: false
         }
       ]
     }

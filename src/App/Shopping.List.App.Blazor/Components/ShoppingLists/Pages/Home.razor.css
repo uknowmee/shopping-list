@@ -31,13 +31,34 @@ td span {
 }
 
 button, span {
-    max-width: 95px;
-    min-width: 95px;
-    max-height: 38px;
-    min-height: 38px;
+    /*max-width: 95px;*/
+    /*min-width: 95px;*/
+    /*max-height: 38px;*/
+    /*min-height: 38px;*/
     color: white;
     justify-content: center; /* Centers horizontally */
     align-items: center;    /* Centers vertically */
     font-weight: bold;
-    font-size: 14px;
+    font-size: 10px;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to the next line */
+    gap: 4px; /* Space between buttons */
+    justify-content: space-around; /* Adjust alignment for better aesthetics */
+}
+
+.controls button {
+    flex: 1 1 calc(50% - 4px); /* Two buttons per row, accounting for gap */
+    max-width: 100%; /* Ensure buttons don't exceed their container width */
+    box-sizing: border-box; /* Include padding/border in width calculation */
+}
+
+table tbody tr {
+    vertical-align: middle;
+}
+
+div .controls {
+    max-width: 65%;
 }

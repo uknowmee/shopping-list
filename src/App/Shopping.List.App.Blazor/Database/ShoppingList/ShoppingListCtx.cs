@@ -22,6 +22,10 @@ public class ShoppingListCtx : DbContext
                 entity.HasMany(su => su.Lists)
                     .WithOne()
                     .HasForeignKey(il => il.UserId);
+
+                entity.HasMany(su => su.Pictures)
+                    .WithOne()
+                    .HasForeignKey(p => p.UserId);
             }
         );
 
@@ -53,19 +57,24 @@ public class ShoppingListCtx : DbContext
 
                 entity.Property(i => i.ItemListId)
                     .HasColumnName("ItemListId");
+
+                entity.Property(i => i.CreationDate)
+                    .HasColumnName("CreationDate");
                 
                 entity.Property(i => i.Quantity)
                     .HasField("_quantity");
+                
+                entity.Property(i => i.IsBought)
+                    .HasField("_isBought");
             }
         );
 
         modelBuilder.Entity<ItemPicture>(entity =>
             {
                 entity.HasKey(ip => ip.Id);
-
-                entity.HasOne<ShoppingUser>()
-                    .WithMany()
-                    .HasForeignKey(ip => ip.UserId);
+                
+                entity.Property(ip => ip.UserId)
+                    .HasColumnName("UserId");
             }
         );
     }

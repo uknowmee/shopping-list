@@ -2,6 +2,7 @@
   Id: Guid_1,
   UserId: Guid_2,
   ItemListId: Guid_3,
+  CreationDate: DateTimeOffset_1,
   Quantity: 1,
   Category: Unknown,
   Size: Unknown,
@@ -10,5 +11,6 @@
     UserId: Guid_2,
     PictureName: img.png,
     PicturePath: pic\Guid_4_Guid_2
-  }
+  },
+  IsBought: false
 }

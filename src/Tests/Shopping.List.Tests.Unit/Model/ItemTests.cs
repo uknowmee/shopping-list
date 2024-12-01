@@ -100,4 +100,22 @@ public class ItemTests
 
         Assert.Null(item.Picture);
     }
+    
+    [Fact]
+    public void MarkItemAsBought_ShouldMarkItemAsBought()
+    {
+        var item = Item.Create(_userId, _itemListId);
+        item.IsBought = true;
+
+        Assert.True(item.IsBought);
+    }
+    
+    [Fact]
+    public void MarkItemAsBought_ShouldThrowException_WhenItemIsAlreadyBought()
+    {
+        var item = Item.Create(_userId, _itemListId);
+        item.IsBought = true;
+
+        Assert.Throws<InvalidOperationException>(() => item.IsBought = true);
+    }
 }

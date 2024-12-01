@@ -1,4 +1,4 @@
-﻿@page "/ShoppingLists/AddItems"
+﻿@page "/ShoppingLists/Items"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @using Shopping.List.App.Blazor.Database.Auth
@@ -8,60 +8,70 @@
 
 @inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
-@inject ILogger<AddItems> Logger
+@inject ILogger<Items> Logger
 @inject ShoppingListCtx Ctx
 
 <PageTitle>AddItems</PageTitle>
 
-<h3>Add Items</h3>
+@if (ItemList?.IsRealized ?? false)
+{
+    <h3>List is already realized.</h3> 
+}
+else
+{
+    <h3>Add Items to @(ItemList?.Name).</h3> 
+}
 
 <div class="controlNav">
     <div>
         <button class="btn btn-primary" @onclick="BackToLists">Back</button>
     </div>
-    <div>
-        <button class="btn btn-primary" @onclick="AddNewItem">New</button>
-    </div>
+    @if (ItemList?.IsRealized is false)
+    {
+        <div>
+            <button class="btn btn-primary" @onclick="AddNewItem">New</button>
+        </div>
+    }
 </div>
 
-@if (List?.Items != null)
-{
-    <div class="items-container">
-        @foreach (var item in List.Items)
-        {
-            <div class="item-card">
-                <Card>
-                    <BodyTemplate>
-                        <div class="img">
-                            <img src="@(item.Picture?.PicturePath ?? "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png")" alt="Item Picture" width="100" height="100"/>
+<div class="items-container">
+    @foreach (var item in ItemListItems ?? [])
+    {
+        <div class="item-card @(ShouldLock(item) ? "table-secondary" : "")">
+            <Card>
+                <BodyTemplate>
+                    <div class="img">
+                        <img src="@(item.Picture?.PicturePath ?? "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png")" alt="Item Picture" width="100" height="100"/>
+                    </div>
+                    <div>
+                        <label>Category:</label>
+                        <Select TValue="string" Color="Color.Primary" Items="UserCategories" IsDisabled="@ShouldLock(item)" IsEditable="true" Value="item.Category" OnValueChanged="@(val => CategoryChanged(val, item))"></Select>
+                    </div>
+                    <div>
+                        <label>Size:</label>
+                        <Select TValue="string" Color="Color.Primary" Items="UserSizes" IsDisabled="@ShouldLock(item)" IsEditable="true" Value="item.Size" OnValueChanged="@(val => SizeChanged(val, item))"></Select>
+                    </div>
+                    <div>
+                        <label>Picture:</label>
+                        <Select TValue="ItemPicture" Color="Color.Primary" Items="UserPictures" IsDisabled="@ShouldLock(item)" IsEditable="false" Value="item.Picture" OnValueChanged="@(val => PictureChanged(val, item))"></Select>
+                    </div>
+                    <div class="itm-bottom">
+                        <div class="bought-toggle">
+                            <button class="btn btn-success" @onclick="() => MarkAsBought(item)" disabled="@ShouldLock(item)">Bought</button>
                         </div>
-                        <div>
-                            <label>Category:</label>
-                            <Select TValue="string" Color="Color.Primary" Items="UserCategories" IsEditable="true" Value="item.Category" OnValueChanged="@(val => CategoryChanged(val, item))"></Select>
+                        <div class="delete">
+                            <button class="btn btn-danger" @onclick="() => DeleteItem(item)" disabled="@ShouldLock(item)">Delete</button>
                         </div>
-                        <div>
-                            <label>Size:</label>
-                            <Select TValue="string" Color="Color.Primary" Items="UserSizes" IsEditable="true" Value="item.Size" OnValueChanged="@(val => SizeChanged(val, item))"></Select>
+                        <div class="quantity">
+                            <label>Quantity:</label>
+                            <BootstrapInputNumber TValue="int" Min="1" Value="@item.Quantity" IsSelectAllTextOnFocus="true" IsDisabled="@ShouldLock(item)" OnValueChanged="@(val => QuantityChanged(val, item))"/>
                         </div>
-                        <div>
-                            <label>Picture:</label>
-                            <Select TValue="ItemPicture" Color="Color.Primary" Items="UserPictures" IsEditable="false" Value="item.Picture" OnValueChanged="@(val => PictureChanged(val, item))"></Select>
-                        </div>
-                        <div class="itm-bottom">
-                            <div class="delete">
-                                <button class="btn btn-danger" @onclick="() => DeleteItem(item)">Delete</button>
-                            </div>
-                            <div class="quantity">
-                                <label>Quantity:</label>
-                                <BootstrapInputNumber TValue="int" Min="1" Value="@item.Quantity" IsSelectAllTextOnFocus="true" OnValueChanged="@(val => QuantityChanged(val, item))"/>
-                            </div>
-                        </div>
-                    </BodyTemplate>
-                </Card>
-            </div>
-        }
-    </div>
-}
+                    </div>
+                </BodyTemplate>
+            </Card>
+        </div>
+    }
+</div>
 
 @code {
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
@@ -71,16 +81,13 @@
 
     private const string HomeUri = "/ShoppingLists/Home";
     private ShoppingUser? _user;
-    private ItemList? List => _user?.Lists.SingleOrDefault(l => l.Id == ListId);
+    private ItemList? ItemList => _user?.Lists.SingleOrDefault(l => l.Id == ListId);
+    private IEnumerable<Item>? ItemListItems => ItemList?.Items.OrderBy(i => i.IsBought).ThenByDescending(i => i.CreationDate);
 
     private IEnumerable<SelectedItem<ItemPicture>> UserPictures
         => _user is not null
-            ? _user.Lists
-                .SelectMany(l => l.Items)
-                .Select(i => i.Picture)
-                .Where(p => p is not null)
-                .Distinct()
-                .Select(p => new SelectedItem<ItemPicture> { Value = p, Text = p?.PictureName ?? "" })
+            ? _user.Pictures
+                .Select(p => new SelectedItem<ItemPicture> { Value = p, Text = p.PictureName })
                 .Append(new SelectedItem<ItemPicture> { Value = null, Text = "No Picture" })
                 .ToList()
             : [];
@@ -105,6 +112,8 @@
                 .ToList()
             : [];
 
+    private bool ShouldLock(Item item) => item.IsBought || (ItemList?.IsRealized ?? false);
+
     protected override async Task OnInitializedAsync()
     {
         if (ListId is null)
@@ -126,6 +135,7 @@
         }
 
         _user = await Ctx.Users
+            .Include(u => u.Pictures)
             .Include(u => u.Lists)
             .ThenInclude(l => l.Items)
             .ThenInclude(i => i.Picture)
@@ -136,16 +146,17 @@
 
     private async Task AddNewItem()
     {
-        if (List is null) return;
-        var item = List.AddItemAtFront();
+        if (ItemList is null) return;
+        if (ItemList.IsRealized) return;
+        var item = ItemList.AddItemAtFront();
         await Ctx.AddAsync(item);
         await Ctx.SaveChangesAsync();
     }
 
     private async Task DeleteItem(Item item)
     {
-        if (List is null) return;
-        List.Items.Remove(item);
+        if (ItemList is null) return;
+        ItemList.Items.Remove(item);
         Ctx.Remove(item);
         await Ctx.SaveChangesAsync();
     }
@@ -176,6 +187,13 @@
     {
         if (val is null) return;
         item.Size = val;
+        await Ctx.SaveChangesAsync();
+        StateHasChanged();
+    }
+
+    private async Task MarkAsBought(Item item)
+    {
+        item.IsBought = !item.IsBought;
         await Ctx.SaveChangesAsync();
         StateHasChanged();
     }

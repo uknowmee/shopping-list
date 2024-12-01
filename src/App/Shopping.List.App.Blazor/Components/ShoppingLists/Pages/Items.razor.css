@@ -25,7 +25,7 @@
     gap: 5px;
 }
 
-.delete {
+.delete, .bought-toggle{
     padding-top: 20px;
 }
 
@@ -35,4 +35,12 @@
 
 .img {
     text-align: right;
+}
+
+.bought-item {
+    opacity: 0.6;
+    pointer-events: none; /* Disable all interactions */
+}
+.bought-item img {
+    filter: grayscale(100%); /* Grayscale the image */
 }

@@ -2,7 +2,9 @@
   Id: Guid_1,
   UserId: Guid_2,
   ItemListId: Guid_3,
+  CreationDate: DateTimeOffset_1,
   Quantity: 1,
   Category: Unknown,
-  Size: Unknown
+  Size: Unknown,
+  IsBought: false
 }
