@@ -197,7 +197,7 @@ else
         if (GetValidPictureUrlFromName(url) == ImgPlaceholder) return null;
         if (_user.Pictures.SingleOrDefault(p => p.PictureName == url) is { } picture) return picture;
 
-        picture = ItemPicture.Create(_user.Id, url);
+        picture = _user.CreatePictureFromUrl(url);
         await Ctx.AddAsync(picture);
         await Ctx.SaveChangesAsync();
 
@@ -206,20 +206,8 @@ else
 
     private async Task PictureChanged(ItemPicture? newPicture, Item item)
     {
-        var oldPicture = item.Picture;
-        item.Picture = null;
-
-        if (oldPicture is not null &&
-            (_user?.Lists
-                    .SelectMany(l => l.Items)
-                    .Where(i => i.Id != item.Id && i.Picture is not null)
-                    .ToDictionary(i => i.Id, i => i.Picture?.Id) ?? new Dictionary<Guid, Guid?>()
-            ).ContainsValue(oldPicture.Id) is false)
-        {
-            _user?.Pictures.Remove(oldPicture);
-        }
-
-        item.Picture = newPicture;
+        if (_user is null) return;
+        _user.ChangePictureForItem(newPicture, item);
         await Ctx.SaveChangesAsync();
         StateHasChanged();
     }

@@ -38,7 +38,7 @@ public class ShoppingUserTests
         var shoppingUser = ShoppingUser.Create(Guid.NewGuid());
         var list = shoppingUser.NewList();
 
-        Assert.Contains(list, shoppingUser.Lists);
+        Assert.Contains(list, shoppingUser.Lists.ToList());
     }
     
     [Fact]
@@ -80,5 +80,57 @@ public class ShoppingUserTests
         var list3 = shoppingUser.NewListAtFront();
 
         Assert.Equal(list3, shoppingUser.Lists.First());
+    }
+    
+    [Fact]
+    public void CreatePictureFromUrl_ShouldCreatePicture_WithUrl()
+    {
+        var shoppingUser = ShoppingUser.Create(Guid.NewGuid());
+        var picture = shoppingUser.CreatePictureFromUrl("https://example.com/image.png");
+
+        Assert.Equal("https://example.com/image.png", picture.PictureName);
+    }
+    
+    [Fact]
+    public void ChangePictureForItem_ShouldChangePictureForItem()
+    {
+        var shoppingUser = ShoppingUser.Create(Guid.NewGuid());
+        var shoppingList = shoppingUser.Lists.First();
+        var item = shoppingList.AddItem();
+        var picture = shoppingUser.CreatePictureFromUrl("https://example.com/image.png");
+        
+        shoppingUser.ChangePictureForItem(picture, item);
+
+        Assert.Equal(picture, item.Picture);
+    }
+    
+    [Fact]
+    public void ChangePictureForItem_ShouldRemoveOldPictureFromPictures_WhenNoOtherItemUsesIt()
+    {
+        var shoppingUser = ShoppingUser.Create(Guid.NewGuid());
+        var shoppingList = shoppingUser.Lists.First();
+        var item = shoppingList.AddItem();
+        var picture = shoppingUser.CreatePictureFromUrl("https://example.com/image.png");
+        var picture2 = shoppingUser.CreatePictureFromUrl("https://example.com/image2.png");
+        
+        shoppingUser.ChangePictureForItem(picture, item);
+        shoppingUser.ChangePictureForItem(picture2, item);
+
+        Assert.DoesNotContain(picture, shoppingUser.Pictures);
+    }
+    
+    [Fact]
+    public void ChangePictureForItem_ShouldNotRemoveOldPictureFromPictures_WhenOtherItemUsesIt()
+    {
+        var shoppingUser = ShoppingUser.Create(Guid.NewGuid());
+        var shoppingList = shoppingUser.Lists.First();
+        var item = shoppingList.AddItem();
+        var item2 = shoppingList.AddItem();
+        var picture = shoppingUser.CreatePictureFromUrl("https://example.com/image.png");
+        
+        shoppingUser.ChangePictureForItem(picture, item);
+        shoppingUser.ChangePictureForItem(picture, item2);
+
+        Assert.Contains(picture, shoppingUser.Pictures.ToList());
     }
 }
