@@ -146,7 +146,6 @@
         var list = _shoppingUser.NewListAtFront();
         await Ctx.Lists.AddAsync(list);
         await Ctx.SaveChangesAsync();
-
         Logger.LogInformation("User {UserId} created list {ListId}", _shoppingUser.Id, list.Id);
     }
 
@@ -155,7 +154,6 @@
         if (_editingList is not null) await SaveList();
         _editingList = list;
         await Ctx.SaveChangesAsync();
-
         Logger.LogInformation("User {UserId} started editing list {ListId}", _shoppingUser?.Id, list.Id);
     }
 
@@ -165,7 +163,6 @@
         if (_editingList is not null) await SaveList();
         _shoppingUser.DeleteList(listId);
         await Ctx.SaveChangesAsync();
-
         Logger.LogInformation("User {UserId} deleted list {ListId}", _shoppingUser.Id, listId);
     }
 
@@ -173,9 +170,7 @@
     {
         if (_editingList is null) return;
         await Ctx.SaveChangesAsync();
-
         Logger.LogInformation("User {UserId} saved list {ListId}", _shoppingUser?.Id, _editingList?.Id);
-
         _editingList = null;
     }
 
@@ -183,7 +178,6 @@
     {
         list.IsRealized = true;
         await Ctx.SaveChangesAsync();
-
         Logger.LogInformation("User {UserId} finalized list {ListId}", _shoppingUser?.Id, list.Id);
     }
 

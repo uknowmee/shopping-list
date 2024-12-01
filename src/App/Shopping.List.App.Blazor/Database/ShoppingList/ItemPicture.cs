@@ -8,7 +8,7 @@ public class ItemPicture
     public Guid UserId { get; } = Guid.Empty;
     [MaxLength(200)] public string PictureName { get; set; } = string.Empty;
     [MaxLength(80)] public string PicturePath => Path.Combine("pic", $"{Id}_{UserId}");
-
+    
     [Obsolete("Only for EF", true)]
     public ItemPicture()
     {

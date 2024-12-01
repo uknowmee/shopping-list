@@ -51,50 +51,33 @@ public class ItemList
     {
         var item = Item.Create(UserId, Id);
         Items.Add(item);
-
         return item;
     }
-    
+
     public Item AddItemAtFront()
     {
         var item = Item.Create(UserId, Id);
         Items.Insert(0, item);
-
         return item;
     }
 
     public Item RemoveItem(Guid itemId)
     {
-        var item = Items.FirstOrDefault(i => i.Id == itemId)
-                   ?? throw new InvalidOperationException("Item not found");
-
+        var item = Items.FirstOrDefault(i => i.Id == itemId) ?? throw new InvalidOperationException("Item not found");
         Items.Remove(item);
-
         return item;
     }
 
     private DateTimeOffset SetDueTo(DateTimeOffset value)
     {
-        if (value < DateTimeOffset.UtcNow)
-        {
-            throw new InvalidOperationException("DueTo cannot be in the past");
-        }
-        
-        if (_isRealized)
-        {
-            throw new InvalidOperationException("List is already realized");
-        }
-
+        if (value < DateTimeOffset.UtcNow) throw new InvalidOperationException("DueTo cannot be in the past");
+        if (_isRealized) throw new InvalidOperationException("List is already realized");
         return value;
     }
 
     private bool SetIsRealized(bool value)
     {
-        if (_isRealized)
-        {
-            throw new InvalidOperationException("List is already realized");
-        }
-
+        if (_isRealized) throw new InvalidOperationException("List is already realized");
         return value;
     }
 }

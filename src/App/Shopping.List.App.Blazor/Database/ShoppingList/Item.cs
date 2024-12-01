@@ -6,7 +6,7 @@ public class Item
 {
     private int _quantity = 1;
     private bool _isBought;
-    
+
     public Guid Id { get; } = Guid.NewGuid();
     public Guid UserId { get; } = Guid.Empty;
     public Guid ItemListId { get; } = Guid.Empty;
@@ -26,22 +26,18 @@ public class Item
     public Item()
     {
     }
-    
+
     private Item(Guid userId, Guid listId)
     {
         UserId = userId;
         ItemListId = listId;
     }
-    
+
     public static Item Create(Guid userId, Guid listId) => new Item(userId, listId);
-    
+
     private bool SetIsRealized(bool value)
     {
-        if (_isBought)
-        {
-            throw new InvalidOperationException("Item is already bought");
-        }
-
+        if (_isBought) throw new InvalidOperationException("Item is already bought");
         return value;
     }
 }

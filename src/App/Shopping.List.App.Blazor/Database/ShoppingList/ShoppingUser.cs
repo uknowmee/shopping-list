@@ -5,7 +5,7 @@ public class ShoppingUser
     public Guid Id { get; } = Guid.Empty;
     public bool IsActive { get; set; } = true;
     public List<ItemList> Lists { get; init; } = [];
-    public List<ItemPicture> Pictures { get; set; } = [];
+    public List<ItemPicture> Pictures { get; init; } = [];
 
 
     [Obsolete("Only for EF", true)]
@@ -37,11 +37,8 @@ public class ShoppingUser
     
     public ItemList DeleteList(Guid listId)
     {
-        var list = Lists.FirstOrDefault(l => l.Id == listId)
-            ?? throw new InvalidOperationException("List not found");
-        
+        var list = Lists.FirstOrDefault(l => l.Id == listId) ?? throw new InvalidOperationException("List not found");
         Lists.Remove(list);
-        
         return list;
     }
 }

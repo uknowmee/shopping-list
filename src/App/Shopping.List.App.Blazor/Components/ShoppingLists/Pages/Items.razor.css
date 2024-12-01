@@ -35,12 +35,20 @@
 
 .img {
     text-align: right;
+    margin-left: auto;
 }
 
 .bought-item {
     opacity: 0.6;
     pointer-events: none; /* Disable all interactions */
 }
+
 .bought-item img {
     filter: grayscale(100%); /* Grayscale the image */
+}
+
+.card-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
