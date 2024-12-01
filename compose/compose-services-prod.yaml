@@ -2,6 +2,7 @@ name: shopping-list-prod
 
 networks:
   shopping-list-prod:
+    external: true
 
 services:
   app:
