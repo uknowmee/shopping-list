@@ -32,10 +32,30 @@
             <div class="item-card">
                 <Card>
                     <BodyTemplate>
-                        <h5 class="card-title">@item.Category</h5>
-                        <p class="card-text">@item.Size</p>
-                        <p class="card-text">@item.Quantity</p>
-                        <p class="card-text">@item.Picture?.PictureName</p>
+                        <div class="img">
+                            <img src="@(item.Picture?.PicturePath ?? "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png")" alt="Item Picture" width="100" height="100"/>
+                        </div>
+                        <div>
+                            <label>Category:</label>
+                            <Select TValue="string" Color="Color.Primary" Items="UserCategories" IsEditable="true" Value="item.Category" OnValueChanged="@(val => CategoryChanged(val, item))"></Select>
+                        </div>
+                        <div>
+                            <label>Size:</label>
+                            <Select TValue="string" Color="Color.Primary" Items="UserSizes" IsEditable="true" Value="item.Size" OnValueChanged="@(val => SizeChanged(val, item))"></Select>
+                        </div>
+                        <div>
+                            <label>Picture:</label>
+                            <Select TValue="ItemPicture" Color="Color.Primary" Items="UserPictures" IsEditable="false" Value="item.Picture" OnValueChanged="@(val => PictureChanged(val, item))"></Select>
+                        </div>
+                        <div class="itm-bottom">
+                            <div class="delete">
+                                <button class="btn btn-danger" @onclick="() => DeleteItem(item)">Delete</button>
+                            </div>
+                            <div class="quantity">
+                                <label>Quantity:</label>
+                                <BootstrapInputNumber TValue="int" Min="1" Value="@item.Quantity" IsSelectAllTextOnFocus="true" OnValueChanged="@(val => QuantityChanged(val, item))"/>
+                            </div>
+                        </div>
                     </BodyTemplate>
                 </Card>
             </div>
@@ -53,7 +73,7 @@
     private ShoppingUser? _user;
     private ItemList? List => _user?.Lists.SingleOrDefault(l => l.Id == ListId);
 
-    private IEnumerable<SelectedItem> UserPictures
+    private IEnumerable<SelectedItem<ItemPicture>> UserPictures
         => _user is not null
             ? _user.Lists
                 .SelectMany(l => l.Items)
@@ -61,6 +81,7 @@
                 .Where(p => p is not null)
                 .Distinct()
                 .Select(p => new SelectedItem<ItemPicture> { Value = p, Text = p?.PictureName ?? "" })
+                .Append(new SelectedItem<ItemPicture> { Value = null, Text = "No Picture" })
                 .ToList()
             : [];
 
@@ -117,9 +138,46 @@
     {
         if (List is null) return;
         var item = List.AddItemAtFront();
-        item.Category = $"sth_{new Random().Next(1000)}";
         await Ctx.AddAsync(item);
         await Ctx.SaveChangesAsync();
+    }
+
+    private async Task DeleteItem(Item item)
+    {
+        if (List is null) return;
+        List.Items.Remove(item);
+        Ctx.Remove(item);
+        await Ctx.SaveChangesAsync();
+    }
+
+    private async Task QuantityChanged(int val, Item item)
+    {
+        item.Quantity = val;
+        await Ctx.SaveChangesAsync();
+    }
+
+    private async Task PictureChanged(ItemPicture? val, Item item)
+    {
+        if (val is null) return;
+        item.Picture = val;
+        await Ctx.SaveChangesAsync();
+        StateHasChanged();
+    }
+
+    private async Task CategoryChanged(string? val, Item item)
+    {
+        if (val is null) return;
+        item.Category = val;
+        await Ctx.SaveChangesAsync();
+        StateHasChanged();
+    }
+
+    private async Task SizeChanged(string? val, Item item)
+    {
+        if (val is null) return;
+        item.Size = val;
+        await Ctx.SaveChangesAsync();
+        StateHasChanged();
     }
 
 }
