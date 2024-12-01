@@ -151,4 +151,13 @@ public class ItemListTests
 
         return Throws(action, _settings);
     }
+    
+    [Fact]
+    public void CreateNewItemAtFront_ShouldAddItemAtFrontOfItems()
+    {
+        var itemList = ItemList.Create(_userId);
+        var item = itemList.AddItemAtFront();
+
+        Assert.Equal(item, itemList.Items[0]);
+    }
 }

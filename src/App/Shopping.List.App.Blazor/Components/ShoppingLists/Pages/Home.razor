@@ -1,7 +1,6 @@
 ﻿@page "/ShoppingLists/Home"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
-@using Shopping.List.App.Blazor.Components.Account
 @using Shopping.List.App.Blazor.Database.Auth
 @using Shopping.List.App.Blazor.Database.ShoppingList
 @using Blazored.Toast
@@ -9,7 +8,7 @@
 
 @rendermode InteractiveServer
 
-@inject IdentityRedirectManager RedirectManager
+@inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
 @inject Blazored.Toast.Services.IToastService ToastService
 @inject ILogger<Home> Logger
@@ -132,15 +131,7 @@
         Logger.LogInformation("User {UserId} has {ListCount} lists", _shoppingUser.Id, _shoppingUser.Lists.Count);
     }
 
-    private Task AddItems(ItemList list)
-    {
-        RedirectManager.RedirectTo(
-            "ShoppingLists/AddItems",
-            new Dictionary<string, object?> { ["id"] = list.Id }
-        );
-
-        return Task.CompletedTask;
-    }
+    private void AddItems(ItemList list) => NavigationManager.NavigateTo($"/ShoppingLists/AddItems?Id={list.Id}");
 
     private async Task CreateNewList()
     {

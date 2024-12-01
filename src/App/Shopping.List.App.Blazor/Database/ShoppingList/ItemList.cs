@@ -54,6 +54,14 @@ public class ItemList
 
         return item;
     }
+    
+    public Item AddItemAtFront()
+    {
+        var item = Item.Create(UserId, Id);
+        Items.Insert(0, item);
+
+        return item;
+    }
 
     public Item RemoveItem(Guid itemId)
     {

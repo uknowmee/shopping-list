@@ -1,13 +1,12 @@
 ﻿@page "/ShoppingLists/AddItems"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
-@using Shopping.List.App.Blazor.Components.Account
 @using Shopping.List.App.Blazor.Database.Auth
 @using Shopping.List.App.Blazor.Database.ShoppingList
 
 @rendermode InteractiveServer
 
-@inject IdentityRedirectManager RedirectManager
+@inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
 @inject ILogger<AddItems> Logger
 @inject ShoppingListCtx Ctx
@@ -25,11 +24,24 @@
     </div>
 </div>
 
-@ListId
-
-<Select TValue="string" Color="Color.Primary" Items="Items" IsEditable="true" OnInputChangedCallback="OnInputChangedCallback"></Select>
-
-@_selected
+@if (List?.Items != null)
+{
+    <div class="items-container">
+        @foreach (var item in List.Items)
+        {
+            <div class="item-card">
+                <Card>
+                    <BodyTemplate>
+                        <h5 class="card-title">@item.Category</h5>
+                        <p class="card-text">@item.Size</p>
+                        <p class="card-text">@item.Quantity</p>
+                        <p class="card-text">@item.Picture?.PictureName</p>
+                    </BodyTemplate>
+                </Card>
+            </div>
+        }
+    </div>
+}
 
 @code {
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
@@ -37,53 +49,77 @@
     [SupplyParameterFromQuery(Name = "Id")]
     private Guid? ListId { get; set; }
 
-    private ItemList? _list;
     private const string HomeUri = "/ShoppingLists/Home";
+    private ShoppingUser? _user;
+    private ItemList? List => _user?.Lists.SingleOrDefault(l => l.Id == ListId);
 
-    private readonly List<string> _items = [];
-    private IEnumerable<SelectedItem> Items => _items.Select(i => new SelectedItem { Text = i, Value = i });
-    private string _selected = string.Empty;
+    private IEnumerable<SelectedItem> UserPictures
+        => _user is not null
+            ? _user.Lists
+                .SelectMany(l => l.Items)
+                .Select(i => i.Picture)
+                .Where(p => p is not null)
+                .Distinct()
+                .Select(p => new SelectedItem<ItemPicture> { Value = p, Text = p?.PictureName ?? "" })
+                .ToList()
+            : [];
+
+    private IEnumerable<SelectedItem> UserCategories
+        => _user is not null
+            ? _user.Lists
+                .SelectMany(l => l.Items)
+                .Select(i => i.Category)
+                .Distinct()
+                .Select(c => new SelectedItem { Value = c, Text = c })
+                .ToList()
+            : [];
+
+    private IEnumerable<SelectedItem> UserSizes
+        => _user is not null
+            ? _user.Lists
+                .SelectMany(l => l.Items)
+                .Select(i => i.Size)
+                .Distinct()
+                .Select(s => new SelectedItem { Value = s, Text = s })
+                .ToList()
+            : [];
 
     protected override async Task OnInitializedAsync()
     {
         if (ListId is null)
         {
             Logger.LogWarning("List Id not provided");
-            RedirectManager.RedirectTo(HomeUri);
+            BackToLists();
             return;
         }
 
         var authState = await AuthenticationStateTask;
         var user = await UserManager.GetUserAsync(authState.User) ?? throw new InvalidOperationException("User not found");
 
-        _list = await Ctx.Lists
-            .Include(l => l.Items)
-            .SingleOrDefaultAsync(l => l.Id == ListId && l.UserId == user.Id);
-
-        if (_list is null)
+        if (await Ctx.Lists
+                .AsNoTracking()
+                .AnyAsync(l => l.Id == ListId && l.UserId == user.Id) is false)
         {
             Logger.LogWarning("List not found");
-            RedirectManager.RedirectTo(HomeUri);
-            return;
+            BackToLists();
         }
+
+        _user = await Ctx.Users
+            .Include(u => u.Lists)
+            .ThenInclude(l => l.Items)
+            .ThenInclude(i => i.Picture)
+            .SingleAsync(u => u.Id == user.Id);
     }
 
-    private Task BackToLists()
+    private void BackToLists() => NavigationManager.NavigateTo(HomeUri);
+
+    private async Task AddNewItem()
     {
-        RedirectManager.RedirectTo(HomeUri);
-        return Task.CompletedTask;
-    }
-    
-    private Task AddNewItem()
-    {
-        return Task.CompletedTask;
+        if (List is null) return;
+        var item = List.AddItemAtFront();
+        item.Category = $"sth_{new Random().Next(1000)}";
+        await Ctx.AddAsync(item);
+        await Ctx.SaveChangesAsync();
     }
 
-    private Task OnInputChangedCallback(string arg)
-    {
-        _selected = arg;
-        _items.Add(arg);
-        return Task.CompletedTask;
-    }
-    
 }

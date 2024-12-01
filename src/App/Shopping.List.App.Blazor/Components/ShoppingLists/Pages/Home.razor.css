@@ -38,4 +38,6 @@ button, span {
     color: white;
     justify-content: center; /* Centers horizontally */
     align-items: center;    /* Centers vertically */
+    font-weight: bold;
+    font-size: 14px;
 }
