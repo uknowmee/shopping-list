@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Tests.It", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Tests.Components", "src\Tests\Shopping.List.Tests.Components\Shopping.List.Tests.Components.csproj", "{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Tests.E2E", "src\Tests\Shopping.List.Tests.E2E\Shopping.List.Tests.E2E.csproj", "{25363B72-C9DA-4FBD-B891-9ECC3816A374}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,7 @@ Global
 		{E1A74F89-CFE2-4FA3-8681-995754F3824E} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
 		{A239979C-3662-4844-95FF-CD44837D8A4B} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
 		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
+		{25363B72-C9DA-4FBD-B891-9ECC3816A374} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -109,5 +112,9 @@ Global
 		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25363B72-C9DA-4FBD-B891-9ECC3816A374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25363B72-C9DA-4FBD-B891-9ECC3816A374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25363B72-C9DA-4FBD-B891-9ECC3816A374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25363B72-C9DA-4FBD-B891-9ECC3816A374}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

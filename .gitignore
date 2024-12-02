@@ -103,9 +103,6 @@ ipch/
 *.vspx
 *.sap
 
-# Visual Studio Trace Files
-*.e2e
-
 # TFS 2012 Local Workspace
 $tf/
 
@@ -342,3 +339,5 @@ pacts/
 # Verify
 *.received.*
 *.received/
+
+*config.local.json

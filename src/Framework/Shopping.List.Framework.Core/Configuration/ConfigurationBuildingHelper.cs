@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Shopping.List.Framework.Core.Configuration;
 
-public static class ConfigurationBuilder
+public static class ConfigurationBuildingHelper
 {
     public static TConfiguration Build<TConfiguration>(IConfiguration configuration, string sectionName, ILogger? logger = null) where TConfiguration : new()
     {

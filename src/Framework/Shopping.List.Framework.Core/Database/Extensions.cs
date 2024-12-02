@@ -9,7 +9,7 @@ public static class Extensions
 {
     public static WebApplicationBuilder AddDatabase<TDatabaseCtx>(this WebApplicationBuilder builder, string configurationSection) where TDatabaseCtx : DbContext
     {
-        var dbOptions = ConfigurationBuilder.Build<DatabaseOptions>(builder.Configuration, configurationSection);
+        var dbOptions = ConfigurationBuildingHelper.Build<DatabaseOptions>(builder.Configuration, configurationSection);
 
         builder.Services.AddDbContext<TDatabaseCtx>(options =>
             {
