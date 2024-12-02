@@ -11,8 +11,11 @@ public class LoggedInTests : LoggedInBase
     {
         await Page.GotoAsync("https://shopping-list.uknowmee.com/ShoppingLists/Home");
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "Shopping Lists", Exact = true }).ClickAsync();
         await Assertions.Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Your Shopping Lists" })).ToBeVisibleAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
 
     [Test]
@@ -28,6 +31,8 @@ public class LoggedInTests : LoggedInBase
         await Assertions.Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Delete" })).ToBeVisibleAsync();
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
 
     [Test]
@@ -42,6 +47,8 @@ public class LoggedInTests : LoggedInBase
         await Assertions.Expect(Page.GetByText("Not yet")).ToBeVisibleAsync();
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
     
     [Test]
@@ -59,5 +66,26 @@ public class LoggedInTests : LoggedInBase
         await Assertions.Expect(Page.GetByRole(AriaRole.Cell, new() { Name = "dinner" })).ToBeVisibleAsync();
         
         await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
+
+    [Test]
+    public async Task ListItems_WhenRealized_NoNewButton()
+    {
+        await Page.GotoAsync("https://shopping-list.uknowmee.com/ShoppingLists/Home");
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "New" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Realized" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Items" }).ClickAsync();
+        
+        await Assertions.Expect(Page.GetByRole(AriaRole.Button, new() { Name = "New" })).Not.ToBeVisibleAsync();
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Back" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+    }
+    
 }
