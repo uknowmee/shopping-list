@@ -12,6 +12,7 @@ public class LoggedInBase
     {
         var playwright = await Playwright.CreateAsync();
         Browser = await playwright.Chromium.LaunchAsync();
+        
         var context = await Browser.NewContextAsync(new BrowserNewContextOptions
             {
                 StorageStatePath = Path.Combine(ConfigurationBuildingHelper.GetProjectRoot(), "state.json")
