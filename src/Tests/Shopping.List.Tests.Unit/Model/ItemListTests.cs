@@ -160,4 +160,54 @@ public class ItemListTests
 
         Assert.Equal(item, itemList.Items[0]);
     }
+    
+    [Fact]
+    public void LocalDueTo_Get_ReturnsLocalDateTime()
+    {
+        var list = ItemList.Create(Guid.NewGuid());
+        var utcNow = DateTimeOffset.UtcNow.AddDays(1);
+        list.DueTo = utcNow;
+
+        var localDueTo = list.LocalDueTo;
+
+        Assert.Equal(utcNow.LocalDateTime, localDueTo);
+    }
+
+    [Fact]
+    public void LocalDueTo_Set_SetsDueToInUtc()
+    {
+        var list = ItemList.Create(Guid.NewGuid());
+        var localFuture = DateTime.Now.AddDays(1);
+
+        list.LocalDueTo = localFuture;
+
+        Assert.NotNull(list.DueTo);
+        Assert.Equal(localFuture.ToUniversalTime(), list.DueTo);
+    }
+
+    [Fact]
+    public void LocalDueTo_SetNull_ThrowsInvalidOperationException()
+    {
+        var list = ItemList.Create(Guid.NewGuid());
+
+        Assert.Throws<InvalidOperationException>(() => list.LocalDueTo = null);
+    }
+
+    [Fact]
+    public void LocalDueTo_SetPastDate_ThrowsInvalidOperationException()
+    {
+        var list = ItemList.Create(Guid.NewGuid());
+        var pastDate = DateTime.Now.AddDays(-1);
+
+        Assert.Throws<InvalidOperationException>(() => list.LocalDueTo = pastDate);
+    }
+
+    [Fact]
+    public void LocalDueTo_SetWhenListIsRealized_ThrowsInvalidOperationException()
+    {
+        var list = ItemList.Create(Guid.NewGuid());
+        list.IsRealized = true;
+        
+        Assert.Throws<InvalidOperationException>(() => list.LocalDueTo = DateTime.Now.AddDays(1));
+    }
 }

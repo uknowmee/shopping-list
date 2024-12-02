@@ -57,6 +57,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".env", ".env", "{D04939FE-2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Tests.Unit", "src\Tests\Shopping.List.Tests.Unit\Shopping.List.Tests.Unit.csproj", "{E1A74F89-CFE2-4FA3-8681-995754F3824E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Tests.It", "src\Tests\Shopping.List.Tests.It\Shopping.List.Tests.It.csproj", "{A239979C-3662-4844-95FF-CD44837D8A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shopping.List.Tests.Components", "src\Tests\Shopping.List.Tests.Components\Shopping.List.Tests.Components.csproj", "{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,8 @@ Global
 		{B65D6EEB-1E04-471B-AE1F-06C4735F4774} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
 		{3B05A4DD-26FA-44BE-9DCD-7548E6EF662B} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
 		{E1A74F89-CFE2-4FA3-8681-995754F3824E} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
+		{A239979C-3662-4844-95FF-CD44837D8A4B} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
+		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1827FEC4-F5E4-46FD-B356-5CE3BD43185D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -95,5 +101,13 @@ Global
 		{E1A74F89-CFE2-4FA3-8681-995754F3824E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1A74F89-CFE2-4FA3-8681-995754F3824E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1A74F89-CFE2-4FA3-8681-995754F3824E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A239979C-3662-4844-95FF-CD44837D8A4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A239979C-3662-4844-95FF-CD44837D8A4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A239979C-3662-4844-95FF-CD44837D8A4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A239979C-3662-4844-95FF-CD44837D8A4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

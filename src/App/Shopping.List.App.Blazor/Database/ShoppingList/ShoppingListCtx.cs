@@ -4,14 +4,19 @@ namespace Shopping.List.App.Blazor.Database.ShoppingList;
 
 public class ShoppingListCtx : DbContext
 {
+    [Obsolete("Test only", true)]
+    public ShoppingListCtx()
+    {
+    }
+
     public ShoppingListCtx(DbContextOptions<ShoppingListCtx> options) : base(options)
     {
     }
 
-    public DbSet<ShoppingUser> Users { get; set; }
-    public DbSet<ItemList> Lists { get; set; }
-    public DbSet<Item> Items { get; set; }
-    public DbSet<ItemPicture> Pictures { get; set; }
+    public virtual DbSet<ShoppingUser> Users { get; set; }
+    public virtual DbSet<ItemList> Lists { get; set; }
+    public virtual DbSet<Item> Items { get; set; }
+    public virtual DbSet<ItemPicture> Pictures { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,10 +37,10 @@ public class ShoppingListCtx : DbContext
         modelBuilder.Entity<ItemList>(entity =>
             {
                 entity.HasKey(il => il.Id);
-                
+
                 entity.Property(il => il.UserId)
                     .HasColumnName("UserId");
-                
+
                 entity.Property(il => il.CreationDate)
                     .HasColumnName("CreationDate");
 
@@ -60,10 +65,10 @@ public class ShoppingListCtx : DbContext
 
                 entity.Property(i => i.CreationDate)
                     .HasColumnName("CreationDate");
-                
+
                 entity.Property(i => i.Quantity)
                     .HasField("_quantity");
-                
+
                 entity.Property(i => i.IsBought)
                     .HasField("_isBought");
             }
@@ -72,7 +77,7 @@ public class ShoppingListCtx : DbContext
         modelBuilder.Entity<ItemPicture>(entity =>
             {
                 entity.HasKey(ip => ip.Id);
-                
+
                 entity.Property(ip => ip.UserId)
                     .HasColumnName("UserId");
             }
