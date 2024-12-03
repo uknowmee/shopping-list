@@ -1,4 +1,9 @@
 ﻿{
+  "WebPage": {
+    "BaseAddress": "https://your_domain.com",
+    "Login": "/Account/Login",
+    "ShoppingListsHome": "/ShoppingLists/Home"
+  },
   "Credentials": {
     "Email": "your_email",
     "Password": "you_password"

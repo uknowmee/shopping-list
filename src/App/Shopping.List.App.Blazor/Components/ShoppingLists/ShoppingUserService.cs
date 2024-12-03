@@ -13,10 +13,7 @@ public class ShoppingUserService : IShoppingUserService
 {
     private readonly ShoppingListCtx _ctx;
 
-    public ShoppingUserService(ShoppingListCtx ctx)
-    {
-        _ctx = ctx;
-    }
+    public ShoppingUserService(ShoppingListCtx ctx) => _ctx = ctx;
 
     public async Task AddShoppingUser(Guid id)
     {

@@ -10,6 +10,7 @@ public class HomeTests : TestContext
     public HomeTests()
     {
         Services.UseServiceProviderFactory(new AutofacServiceProviderFactory(b => b.RegisterModule<TestModule>()));
+        this.SetupTestContext();
     }
 
     [Fact]

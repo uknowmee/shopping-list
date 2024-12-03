@@ -13,11 +13,7 @@ public class ShoppingUser
     {
     }
 
-    private ShoppingUser(Guid id)
-    {
-        Id = id;
-        Lists = [ItemList.Create(id)];
-    }
+    private ShoppingUser(Guid id) => (Id, Lists) = (id, [ItemList.Create(id)]);
 
     public static ShoppingUser Create(Guid id) => new ShoppingUser(id);
 

@@ -99,6 +99,7 @@
 
 @code {
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+    
     private ShoppingUser? _shoppingUser;
     private List<ItemList> SortedLists => _shoppingUser?.Lists ?? [];
     private ItemList? _editingList;

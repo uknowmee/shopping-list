@@ -78,10 +78,10 @@ else
 
 @code {
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
-
     [SupplyParameterFromQuery(Name = "Id")] private Guid? ListId { get; set; }
 
     const string ImgPlaceholder = "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png";
+    
     private const string HomeUri = "/ShoppingLists/Home";
     private ShoppingUser? _user;
     private ItemList? ItemList => _user?.Lists.SingleOrDefault(l => l.Id == ListId);

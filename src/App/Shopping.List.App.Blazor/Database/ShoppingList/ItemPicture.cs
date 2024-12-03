@@ -14,11 +14,7 @@ public class ItemPicture
     {
     }
 
-    private ItemPicture(Guid userId, string picName)
-    {
-        UserId = userId;
-        PictureName = picName;
-    }
+    private ItemPicture(Guid userId, string picName) => (UserId, PictureName) = (userId, picName);
 
     public static ItemPicture Create(Guid userId, string picName) => new ItemPicture(userId, picName);
 }

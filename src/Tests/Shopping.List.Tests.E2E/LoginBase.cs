@@ -2,8 +2,10 @@
 
 namespace Shopping.List.Tests.E2E;
 
-public class LoggedInBase
+public class LoginBase
 {
+    protected readonly Config Cfg = Config.Instance;
+    
     public IBrowser Browser { get; set; }
     protected IPage Page { get; set; }
 
@@ -12,12 +14,8 @@ public class LoggedInBase
     {
         var playwright = await Playwright.CreateAsync();
         Browser = await playwright.Chromium.LaunchAsync();
-        
-        var context = await Browser.NewContextAsync(new BrowserNewContextOptions
-            {
-                StorageStatePath = Path.Combine(ConfigurationBuildingHelper.GetProjectRoot(), "state.json")
-            }
-        );
+
+        var context = await Browser.NewContextAsync(new BrowserNewContextOptions { StorageStatePath = Cfg.StorageStatePath });
         Page = await context.NewPageAsync();
     }
 

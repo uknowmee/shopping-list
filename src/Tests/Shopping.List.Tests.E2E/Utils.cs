@@ -2,7 +2,7 @@
 
 namespace Shopping.List.Tests.E2E;
 
-public static class ConfigurationBuildingHelper
+public static class Utils
 {
     public static TConfiguration Build<TConfiguration>(IConfiguration configuration, string sectionName) where TConfiguration : new()
     {

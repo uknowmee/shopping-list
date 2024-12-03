@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
@@ -8,12 +9,12 @@ namespace Shopping.List.Tests.E2E.Tests;
 [TestFixture]
 public class IndexTests : PageTest
 {
-    private const string PageUrl = "https://shopping-list.uknowmee.com/";
+    private readonly Config _cfg = Config.Instance;
 
     [Test]
     public async Task HasTitle()
     {
-        await Page.GotoAsync(PageUrl);
+        await Page.GotoAsync(_cfg.BaseAddress);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Expect(Page).ToHaveTitleAsync(new Regex("Home"));
     }
@@ -21,8 +22,9 @@ public class IndexTests : PageTest
     [Test]
     public async Task NavigateToShoppingList_WhenNotLoggedIn_LoginShouldBeVisible()
     {
-        await Page.GotoAsync("https://shopping-list.uknowmee.com/");
+        await Page.GotoAsync(_cfg.BaseAddress);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "Shopping Lists", Exact = true }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in", Exact = true })).ToBeVisibleAsync();
     }
@@ -30,8 +32,9 @@ public class IndexTests : PageTest
     [Test]
     public async Task FromLogin_WhenRegisterAsNewClicked_ShouldGoToRegister()
     {
-        await Page.GotoAsync("https://shopping-list.uknowmee.com/");
+        await Page.GotoAsync(_cfg.BaseAddress);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register as a new user" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Register" })).ToBeVisibleAsync();

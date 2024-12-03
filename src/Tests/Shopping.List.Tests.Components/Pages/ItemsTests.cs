@@ -1,8 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Blazored.Toast;
 using Bunit;
-using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Shopping.List.App.Blazor.Components.ShoppingLists.Pages;
@@ -14,22 +12,14 @@ public class ItemsTests : TestContext
     public ItemsTests()
     {
         Services.UseServiceProviderFactory(new AutofacServiceProviderFactory(b => b.RegisterModule<TestModule>()));
-
-        this.AddFakePersistentComponentState();
-        
-        Services.AddBootstrapBlazor();
-        JSInterop.Mode = JSRuntimeMode.Loose;
-        JSInterop.SetupModule("./_content/BootstrapBlazor/Components/Input/BootstrapInput.razor.js");
-        JSInterop.SetupVoid("selectAllByFocus", _ => true);
-        
-        var navigationManager = Services.GetRequiredService<NavigationManager>();
-        var uri = navigationManager.GetUriWithQueryParameter("id", TestModule.ListId);
-        navigationManager.NavigateTo(uri);
+        this.SetupTestContext();
     }
 
     [Fact]
     public void ShouldRenderButtonBack()
     {
+        var navigationManager = Services.GetRequiredService<NavigationManager>();
+        navigationManager.NavigateTo($"/ShoppingLists/Items?Id={MockShoppingListCtxExtensions.ListId}");
         var cut = RenderComponent<Items>(parameters => parameters.AddCascadingValue(TestModule.MockAuthState()));
 
         var buttons = cut.FindAll("button");

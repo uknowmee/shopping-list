@@ -27,11 +27,7 @@ public class Item
     {
     }
 
-    private Item(Guid userId, Guid listId)
-    {
-        UserId = userId;
-        ItemListId = listId;
-    }
+    private Item(Guid userId, Guid listId) => (UserId, ItemListId) = (userId, listId);
 
     public static Item Create(Guid userId, Guid listId) => new Item(userId, listId);
 

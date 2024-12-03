@@ -39,11 +39,7 @@ public class ItemList
     {
     }
 
-    private ItemList(Guid userId)
-    {
-        UserId = userId;
-        Items = [Item.Create(userId, Id)];
-    }
+    private ItemList(Guid userId) => (UserId, Items) = (userId, [Item.Create(userId, Id)]);
 
     public static ItemList Create(Guid userId) => new ItemList(userId);
 
