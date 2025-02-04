@@ -11,10 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "compose", "compose", "{7C3C
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{7B2A3F5B-EF49-4B43-9380-978D4D9C2D0D}"
-	ProjectSection(SolutionItems) = preProject
-		docs\appRequirements.md = docs\appRequirements.md
-		docs\README.md = docs\README.md
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution.Items", "Solution.Items", "{32DAF64B-EFB7-4D04-901C-ADEB9BDBA1A9}"
 	ProjectSection(SolutionItems) = preProject

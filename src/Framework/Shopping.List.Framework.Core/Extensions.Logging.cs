@@ -5,17 +5,17 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
 
-namespace Shopping.List.Framework.Core.Serilog;
+namespace Shopping.List.Framework.Core;
 
-internal static class Extensions
+public static partial class Extensions
 {
-    public static WebApplicationBuilder AddLogging(this WebApplicationBuilder builder)
+    private static WebApplicationBuilder AddLogging(this WebApplicationBuilder builder)
     {
         builder.Host.UseSerilog();
         return builder;
     }
 
-    public static void AddLogger(this IServiceCollection services, Func<LoggerConfiguration, LoggerConfiguration>? updateLoggerConfiguration)
+    private static IServiceCollection AddLogger(this IServiceCollection services, Func<LoggerConfiguration, LoggerConfiguration>? updateLoggerConfiguration)
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", false, true)
@@ -37,7 +37,9 @@ internal static class Extensions
         );
 
         services.AddSingleton(factory);
+        
+        return services;
     }
 
-    public static IApplicationBuilder UseContextLogger(this IApplicationBuilder app) => app.UseSerilogRequestLogging();
+    private static IApplicationBuilder UseContextLogger(this IApplicationBuilder app) => app.UseSerilogRequestLogging();
 }

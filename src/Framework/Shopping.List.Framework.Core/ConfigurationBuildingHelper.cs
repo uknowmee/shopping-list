@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Shopping.List.Framework.Core.Configuration;
+namespace Shopping.List.Framework.Core;
 
 public static class ConfigurationBuildingHelper
 {

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Shopping.List.Framework.Core.Configuration;
 
-namespace Shopping.List.Framework.Core.Database;
+namespace Shopping.List.Framework.Core;
 
-public static class Extensions
+public static partial class Extensions
 {
     public static WebApplicationBuilder AddDatabase<TDatabaseCtx>(this WebApplicationBuilder builder, string configurationSection) where TDatabaseCtx : DbContext
     {
@@ -15,7 +14,6 @@ public static class Extensions
             {
                 _ = dbOptions.Type switch
                 {
-                    DatabaseType.Sqlite => UseSqlite(options, dbOptions),
                     DatabaseType.Postgres => options.UseNpgsql(dbOptions.ConnectionString),
                     _ => throw new InvalidOperationException($"Unsupported database type: {dbOptions.Type}")
                 };
@@ -23,21 +21,6 @@ public static class Extensions
         );
 
         return builder;
-    }
-
-    private static DbContextOptionsBuilder UseSqlite(DbContextOptionsBuilder options, DatabaseOptions dbOptions)
-    {
-        var connectionString = dbOptions.ConnectionString;
-        var currentDirectory = Directory.GetCurrentDirectory();
-        var relativePath = connectionString.Split('=')[1].Split('/').SkipLast(1).ToArray();
-        var dbDirPath = Path.Combine(currentDirectory, Path.Combine(relativePath));
-        
-        if (Directory.Exists(dbDirPath) is false)
-        {
-            Directory.CreateDirectory(dbDirPath);
-        }
-
-        return options.UseSqlite(connectionString);
     }
 
     public static IApplicationBuilder CreateDatabase<TDatabase>(this IApplicationBuilder app) where TDatabase : DbContext
@@ -49,4 +32,15 @@ public static class Extensions
 
         return app;
     }
+}
+
+public enum DatabaseType
+{
+    Postgres = 0
+}
+
+public class DatabaseOptions
+{
+    public DatabaseType Type { get; set; } = DatabaseType.Postgres;
+    public string ConnectionString { get; set; } = string.Empty;
 }

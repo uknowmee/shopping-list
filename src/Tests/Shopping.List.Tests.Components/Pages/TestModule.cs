@@ -15,7 +15,7 @@ using Moq;
 using Shopping.List.App.Blazor.Database.Auth;
 using Shopping.List.App.Blazor.Database.ShoppingList;
 
-namespace Shopping.List.Tests.Components;
+namespace Shopping.List.Tests.Components.Pages;
 
 public class TestModule : Module
 {
