@@ -2,6 +2,7 @@ name: shopping-list-prod
 
 networks:
   shopping-list-prod:
+  caddy:
     external: true
 
 services:
@@ -24,4 +25,5 @@ services:
       SEQ_HOST: ${SEQ_HOST}
     networks:
       - shopping-list-prod
+      - caddy
     restart: always

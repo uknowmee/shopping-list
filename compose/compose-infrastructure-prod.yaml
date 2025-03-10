@@ -2,31 +2,14 @@ name: shopping-list-prod
 
 networks:
   shopping-list-prod:
-    external: true
   caddy:
     external: true
 
 volumes:
   postgres-data:
-  caddy-config:
-  caddy-data:
   seq-data:
 
 services:
-  caddy:
-    image: caddy:latest
-    container_name: shopping-list-prod.caddy
-    networks:
-      - shopping-list-prod
-      - caddy
-    volumes:
-      - caddy-config:/config
-      - caddy-data:/data
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-    environment:
-      DOMAIN: ${DOMAIN}
-    restart: always
-
   haproxy:
     image: shopping-list-prod.haproxy
     container_name: shopping-list-prod.haproxy
@@ -62,6 +45,7 @@ services:
     container_name: shopping-list-prod.seq
     networks:
       - shopping-list-prod
+      - caddy
     volumes:
       - seq-data:/data
     environment:
