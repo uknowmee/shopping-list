@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "compose", "compose", "{7C3C
 		compose\compose-services-prod.yaml = compose\compose-services-prod.yaml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{7B2A3F5B-EF49-4B43-9380-978D4D9C2D0D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution.Items", "Solution.Items", "{32DAF64B-EFB7-4D04-901C-ADEB9BDBA1A9}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
@@ -38,11 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "haproxy", "haproxy", "{B65D
 	ProjectSection(SolutionItems) = preProject
 		compose\haproxy\haproxy.cfg = compose\haproxy\haproxy.cfg
 		compose\haproxy\Dockerfile-haproxy = compose\haproxy\Dockerfile-haproxy
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "caddy", "caddy", "{3B05A4DD-26FA-44BE-9DCD-7548E6EF662B}"
-	ProjectSection(SolutionItems) = preProject
-		compose\caddy\Caddyfile = compose\caddy\Caddyfile
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".env", ".env", "{D04939FE-2300-453F-BB0F-515B38AB1E11}"
@@ -73,7 +66,6 @@ Global
 		{B9931D67-AA07-46B2-8783-5D9D4778F8C0} = {8FC70975-05D7-4B03-80D1-2DE8681E7412}
 		{BC8F43F1-8F16-4C6E-A9B6-47D7BFEF9734} = {8FC70975-05D7-4B03-80D1-2DE8681E7412}
 		{B65D6EEB-1E04-471B-AE1F-06C4735F4774} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
-		{3B05A4DD-26FA-44BE-9DCD-7548E6EF662B} = {7C3C5E07-7BF8-4F75-9E78-D3D0A6282503}
 		{E1A74F89-CFE2-4FA3-8681-995754F3824E} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
 		{A239979C-3662-4844-95FF-CD44837D8A4B} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}
 		{78F0E136-F5D2-43F8-A738-D6BCFB1B4572} = {C41C3A3D-3FFE-4AE5-827C-001AA269C0C6}

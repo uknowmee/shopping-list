@@ -9,7 +9,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:17
     container_name: shopping-list-dev.postgres
     networks:
       - shopping-list-dev
@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
 
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq:2024.3
     container_name: shopping-list-dev.seq
     networks:
       - shopping-list-dev

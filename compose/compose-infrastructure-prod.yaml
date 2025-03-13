@@ -30,7 +30,7 @@ services:
     restart: always
   
   postgres:
-    image: postgres:latest
+    image: postgres:17
     container_name: shopping-list-prod.postgres
     networks:
       - shopping-list-prod
@@ -42,7 +42,7 @@ services:
     restart: always
   
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq:2024.3
     container_name: shopping-list-prod.seq
     networks:
       - shopping-list-prod
