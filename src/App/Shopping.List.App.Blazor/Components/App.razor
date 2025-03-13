@@ -23,6 +23,11 @@
     <link rel="stylesheet" href="_content/BootstrapBlazor/css/bootstrap.blazor.bundle.min.css" />
     <link rel="stylesheet" href="_content/BootstrapBlazor/css/motronic.min.css" />
     <HeadOutlet/>
+
+    @if (Env.IsDevelopment() is false)
+    {
+        <script defer src="https://umami.dev.uknowmee.com/script.js" data-website-id="f3f07ccf-2d5a-4173-9a6c-c80bca05a35a"></script>
+    }
 </head>
 
 <body>
